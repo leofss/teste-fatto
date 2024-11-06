@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .notice-message {
+      @apply p-4 text-center text-2xl;
+    }
+}
