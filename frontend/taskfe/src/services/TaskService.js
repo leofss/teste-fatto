@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiUrl = "http://localhost:8081/api/v1/task";
+const apiUrl = import.meta.env.REACT_APP_API_URL
 
 const TaskService = {
 
