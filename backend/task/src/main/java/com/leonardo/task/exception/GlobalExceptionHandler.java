@@ -46,6 +46,22 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(NegativeAmountException.class)
+    public ResponseEntity<ErrorMessageBuilder> handleNegativeAmountException(
+            NegativeAmountException ex,
+            HttpServletRequest request
+    ) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ErrorMessageBuilder(
+                        request,
+                        HttpStatus.BAD_REQUEST,
+                        ex.getErrorMessage(),
+                        ex.getParams()
+                ));
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorMessageBuilder> handleMethodArgumentNotValidException(HttpServletRequest request,
                                                                                      BindingResult bindingResult) {
@@ -75,6 +91,7 @@ public class GlobalExceptionHandler {
                         ex.getMessage()
                 ));
     }
+
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorMessageBuilder> handleHttpMessageNotReadableException(

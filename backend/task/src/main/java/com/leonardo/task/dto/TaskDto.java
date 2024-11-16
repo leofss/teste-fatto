@@ -1,6 +1,7 @@
 package com.leonardo.task.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -27,9 +28,14 @@ public class TaskDto {
 
     @NotNull(message = "amount cannot be null")
     @Schema(name = "amount", example = "120", description = "Amount that a task costs")
+    @Digits(integer = 36, fraction = 2, message = "Amount must have up to 36 digits before the decimal point and up to 2 after")
     private BigDecimal amount;
 
     @NotNull(message = "Due Date cannot be null")
     @Schema(name = "dueDate", example = "2024-11-28", description = "Date that a task is due to")
     private LocalDate dueDate;
+
+    @Schema(name = "Display order", example = "1", description = "Order set to display")
+    private Integer displayOrder;
+
 }

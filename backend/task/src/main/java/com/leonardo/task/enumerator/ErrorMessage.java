@@ -4,6 +4,7 @@ public enum ErrorMessage {
     TASK_NOT_FOUND("Task not found"),
     INVALID_FIELDS("Invalid fields"),
     GENERIC("Internal server error"),
+    NEGATIVE_AMOUNT("Task cost can not be less then zero"),
     TASK_WITH_TITLE_ALREADY_EXISTS("Task with title %s already exists");
 
 

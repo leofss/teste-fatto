@@ -1,6 +1,8 @@
 package com.leonardo.task.controller;
 
+import com.leonardo.task.dto.MoveDto;
 import com.leonardo.task.dto.TaskDto;
+import com.leonardo.task.enumerator.MoveType;
 import com.leonardo.task.exception.ErrorMessageBuilder;
 import com.leonardo.task.service.TaskService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,9 +29,9 @@ public class TaskController {
     private final TaskService taskService;
 
     @PostMapping
-    @Operation(summary = "Create Task", description = "Route to create an address")
+    @Operation(summary = "Create Task", description = "Route to create a task")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Address successfully created",
+            @ApiResponse(responseCode = "201", description = "Task successfully created",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = TaskDto.class))}),
 
@@ -46,7 +48,7 @@ public class TaskController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @Operation(summary = "Delete Task", description = "Route to delete a task by id")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Address successfully deleted",
+            @ApiResponse(responseCode = "204", description = "Task successfully deleted",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = TaskDto.class))}),
 
@@ -86,6 +88,22 @@ public class TaskController {
     public ResponseEntity<TaskDto> update(@PathVariable UUID uuid, @RequestBody @Valid TaskDto taskDto) {
         TaskDto task = taskService.update(taskDto, uuid);
         return ResponseEntity.ok(task);
+    }
+
+    @PatchMapping("/{uuid}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @Operation(summary = "Edit task order", description = "Route to edit a task order by its id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Task successfully moved",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TaskDto.class))}),
+
+            @ApiResponse(responseCode = "404", description = "Task not found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ErrorMessageBuilder.class))}),
+    })
+    public void changeOrder(@PathVariable UUID uuid, @RequestBody @Valid MoveDto moveDto) {
+        taskService.updateDisplayOrder(uuid, moveDto.getMoveType());
     }
 
 }

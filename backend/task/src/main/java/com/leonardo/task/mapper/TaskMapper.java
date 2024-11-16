@@ -3,6 +3,7 @@ package com.leonardo.task.mapper;
 import com.leonardo.task.dto.TaskDto;
 import com.leonardo.task.model.Task;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
