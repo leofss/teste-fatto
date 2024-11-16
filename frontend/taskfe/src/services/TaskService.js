@@ -34,14 +34,26 @@ const TaskService = {
     editTask: async (taskId, taskData) => {
 
         try {
-            console.log(`${apiUrl}/${taskId}`)
-            console.log("Task Data:", taskData); 
             const response = await axios.put(`${apiUrl}/${taskId}`, taskData, {
                 headers: {
                     'Content-Type': 'application/json', 
                 }
             });
-            console.log(response)
+            return response.data; 
+        } catch (error) {
+            console.error("Error editing task:", error);
+            throw error; 
+        }
+    },
+
+    updateTaskOrder: async (taskId, moveType) => {
+
+        try {
+            const response = await axios.patch(`${apiUrl}/${taskId}`, { moveType: moveType }, {
+                headers: {
+                    'Content-Type': 'application/json', 
+                }
+            });
             return response.data; 
         } catch (error) {
             console.error("Error editing task:", error);

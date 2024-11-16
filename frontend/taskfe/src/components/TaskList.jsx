@@ -56,6 +56,7 @@ const TaskList = () => {
     if (index > 0) {
       const newTasks = [...tasks];
       [newTasks[index], newTasks[index - 1]] = [newTasks[index - 1], newTasks[index]];
+      TaskService.updateTaskOrder(tasks[index].id, "UP")
       setTasks(newTasks);
     }
   };
@@ -64,6 +65,7 @@ const TaskList = () => {
     if (index < tasks.length - 1) {
       const newTasks = [...tasks];
       [newTasks[index], newTasks[index + 1]] = [newTasks[index + 1], newTasks[index]];
+      TaskService.updateTaskOrder(tasks[index].id, "DOWN")
       setTasks(newTasks);
     }
   };
@@ -76,6 +78,7 @@ const TaskList = () => {
             <th>Title</th>
             <th>Amount</th>
             <th>Due Date</th>
+            <th>Order</th>
             <th>Actions</th>
           </tr>
         </thead>

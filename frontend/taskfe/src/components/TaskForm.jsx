@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import TaskService from "../services/TaskService";
 
 const TaskForm = ({ task, fetchTasks }) => {
@@ -9,6 +9,13 @@ const TaskForm = ({ task, fetchTasks }) => {
   const [id, setId] = useState("")
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false); 
+  const titleInputRef = useRef(null);
+
+  useEffect(() => {
+    if (titleInputRef.current) {
+      titleInputRef.current.focus();
+    }
+  }, []);
 
   useEffect(() => {
     if (task) {
@@ -20,18 +27,30 @@ const TaskForm = ({ task, fetchTasks }) => {
   }, [task]);
 
   const handleError = (error) => {
-    if (error.response && error.response.data && error.response.data.message) {
+    if (error.response.status === 422 && error.response.data.errors) {
+      const errorField = Object.keys(error.response.data.errors)[0];
+      const errorMessage = error.response.data.errors[errorField];
+      setErrorMessage(errorMessage);  
+    } else if (error.response.data && error.response.data.message) {
       setErrorMessage(error.response.data.message);
     } else {
       setErrorMessage("Currently unavailable, please try again later.");
     }
   };
 
+
+
   const handleAddTask = async (taskData) => {
     setErrorMessage("");
     setIsLoading(true);
     try {
-      await TaskService.addTask(taskData);
+      const formattedCost = parseFloat(cost).toFixed(2);  
+      const taskWithFormattedCost = {
+        ...taskData,
+        amount: formattedCost,  
+      };
+      console.log(taskWithFormattedCost)
+      await TaskService.addTask(taskWithFormattedCost);
       fetchTasks();
       setTitle("");
       setCost("");
@@ -47,7 +66,12 @@ const TaskForm = ({ task, fetchTasks }) => {
     setErrorMessage("");
     setIsLoading(true);
     try {
-      await TaskService.editTask(id, taskData);
+      const formattedCost = parseFloat(cost).toFixed(2);  
+      const taskWithFormattedCost = {
+        ...taskData,
+        amount: formattedCost, 
+      };
+      await TaskService.editTask(id, taskWithFormattedCost);
       fetchTasks();
     } catch (error) {
       handleError(error);
@@ -76,6 +100,7 @@ const TaskForm = ({ task, fetchTasks }) => {
       <div className="mb-4">
         <label className="block text-white font-bold mb-2">Title</label>
         <input
+          ref={titleInputRef}
           type="text"
           id="title"
           name="title"

@@ -14,11 +14,17 @@ const Task = ({
     task.amount > 1000 ? "bg-yellow-300" : "bg-indigo-700";
 
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    const [year, month, day] = dateString.split("-");
+    return `${day}/${month}/${year}`; 
+  };
+
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("pt-BR", {
+      style: "currency",
+      currency: "BRL",
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(amount);
   };
 
   return (
@@ -31,12 +37,17 @@ const Task = ({
       <td
         className={`h-12 text-2xl max-[640px]:text-base ${backgroundColor} text-white text-center`}
       >
-        {task.amount}
+        {formatCurrency(task.amount)}
       </td>
       <td
         className={`h-12 text-2xl max-[640px]:text-base ${backgroundColor} text-white text-center`}
       >
         {formatDate(task.dueDate)}
+      </td>
+      <td
+        className={`h-12 text-2xl max-[640px]:text-base ${backgroundColor} text-white text-center`}
+      >
+        {task.displayOrder}
       </td>
       <td
         className={`flex items-center max-[640px]:h-20 max-[640px]:gap-0 text-2xl justify-center gap-4 h-12 ${backgroundColor} text-white text-center`}
